@@ -21,7 +21,7 @@ io.on('connect', (socket) => {
     const {id} = socket;
     console.log('connected!', id);
 
-    console.log(socket.request);
+    console.log(socket.handshake);
 
     socket.on('disconnect', () => {
         console.log('disconnected!', id);
