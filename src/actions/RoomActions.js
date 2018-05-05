@@ -130,7 +130,7 @@ exports.joinRoom = ({name, roomCode}) => {
 
         const names = users.map(user => user.name);
         if (names.indexOf(name) !== -1) {
-            return Promise.resolve(true);
+            return Promise.resolve(room);
         }
 
         const newUser = {
@@ -139,10 +139,22 @@ exports.joinRoom = ({name, roomCode}) => {
 
         users.push(newUser);
 
-        return room.update({
-            $set: {
-                users
+        room.users = users;
+
+        return room.save();
+    }).then(room => {
+        console.log(room);
+
+        const users = Array.isArray(room.get('users')) ? room.get('users') : [];
+
+        let user = {};
+
+        users.forEach(_user => {
+            if (_user.name === name) {
+                user = _user;
             }
-        }).then(() => Promise.resolve(true));
+        });
+
+        return Promise.resolve(user);
     });
 };

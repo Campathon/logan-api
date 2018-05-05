@@ -14,7 +14,10 @@ const roomSchema = new Schema({
         default: 'waiting'
     },
     users: [{
-        name: String,
+        name: {
+            type: String,
+            trim: true
+        },
         card: String,
         status: {
             type: String,
