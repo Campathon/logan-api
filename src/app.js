@@ -21,6 +21,11 @@ app.use(errorHandler());
 app.use(robots({UserAgent: '*', Disallow: '/'}));
 
 /**
+ * Config public folder.
+ */
+app.use(express.static(__dirname + '/../public'));
+
+/**
  * Config routes.
  */
 app.use(require('./app.routes'));
