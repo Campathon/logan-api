@@ -1,6 +1,8 @@
 const IncrementServices = require('../services/IncrementServices');
 const Room = require('../models/Room');
+const Card = require('../models/Card');
 const mathHelpers = require('../helpers/math');
+const objectHelpers = require('../helpers/object');
 
 const _newRoom = (code) => {
     const room = new Room({
@@ -27,6 +29,46 @@ const _assignCards = (users, cardIds) => {
     }
 
     return Promise.resolve(users);
+};
+
+const _mapCards = (users) => {
+    const cardIds = users
+        .map(user => user.card)
+        .filter(id => !!id);
+
+    return Card.find({
+        _id: {
+            $in: cardIds
+        }
+    }).then(cards => {
+        const hashCards = objectHelpers.arrayToObject(cards, '_id');
+
+        const updatedUsers = users.map(user => {
+            const card = user.card || '';
+            const object = hashCards[card] || '';
+
+            return Object.assign({}, user, {card: object});
+        });
+
+        return Promise.resolve(updatedUsers);
+    });
+};
+
+exports.getUsers = (roomCode) => {
+    return Room.findOne({
+        code: roomCode
+    }).then(room => {
+        if (!room) {
+            throw new Error("Mã phòng không tồn tại!");
+        }
+
+        return Promise.resolve(room);
+    }).then(room => {
+        const users = Array.isArray(room.get('rooms')) ? room.get('rooms') : [];
+        const _users = _mapCards(users);
+
+        return Promise.resolve(_users);
+    });
 };
 
 exports.readyRoom = (roomCode) => {
