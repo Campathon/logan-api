@@ -18,7 +18,7 @@ router.post('/rooms', roomCtrl.createRoom);
  * Cards.
  */
 const cardCtrl = require('./controllers/card');
-router.get('/cards', cardCtrl.getListCards);
+router.get('/card', cardCtrl.getListCards);
 
 /**
  * Exports.
