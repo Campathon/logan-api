@@ -17,8 +17,12 @@ const server = require('http').Server(app);
 const PushServices = require('./services/PushServices');
 const io = PushServices.setup(server);
 
-io.on('connect', () => {
+io.on('connect', (socket) => {
     console.log('connected!');
+
+    socket.on('disconnect', () => {
+        console.log('disconnected!');
+    });
 });
 
 app.use((req, res, next) => {
