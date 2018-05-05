@@ -21,7 +21,7 @@ io.on('connect', (socket) => {
     const {id} = socket;
     console.log('connected!', id);
 
-    console.log(socket.io.opts.query);
+    console.log(socket.io.query);
 
     socket.on('disconnect', () => {
         console.log('disconnected!', id);
