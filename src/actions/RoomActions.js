@@ -200,9 +200,7 @@ exports.joinRoom = ({name, roomCode}) => {
             throw new Error('Phòng chơi đã kết thúc!');
         }
 
-        if (status === 'playing') {
-            throw new Error('Phòng đang chơi!');
-        }
+
 
         if (status === 'ready') {
             throw new Error('Phòng chơi đã đủ người!');
@@ -211,6 +209,10 @@ exports.joinRoom = ({name, roomCode}) => {
         const names = users.map(user => user.name);
         if (names.indexOf(name) !== -1) {
             return Promise.resolve(room);
+        }
+
+        if (status === 'playing') {
+            throw new Error('Phòng đang chơi!');
         }
 
         const newUser = {
