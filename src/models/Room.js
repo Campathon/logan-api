@@ -6,6 +6,7 @@ const roomSchema = new Schema({
     code: {
         type: Number,
         index: true,
+        unique: true
     },
     users: [{
         type: String,
