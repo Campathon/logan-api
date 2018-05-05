@@ -3,6 +3,7 @@ const Room = require('../models/Room');
 const Card = require('../models/Card');
 const mathHelpers = require('../helpers/math');
 const objectHelpers = require('../helpers/object');
+const PushServices = require('../services/PushServices');
 
 const _newRoom = (code) => {
     const room = new Room({
@@ -46,8 +47,9 @@ const _mapCards = (users) => {
         const updatedUsers = users.map(user => {
             const card = user.card || '';
             const object = hashCards[card] || '';
+            const obj = user.toJSON ? user.toJSON() : user;
 
-            return Object.assign({}, user, {card: object});
+            return Object.assign({}, obj, {card: object});
         });
 
         return Promise.resolve(updatedUsers);
@@ -142,7 +144,16 @@ exports.playGame = ({cards, roomCode}) => {
 
                 return room.save();
             });
-    });
+    }).then(room => {
+        const users = Array.isArray(room.get('users')) ? room.get('users') : [];
+        const mapUsers = _mapCards(users);
+
+        const code = room.get('code');
+        const roomChanel = PushServices.getChanel(`@room/${code}`);
+        roomChanel.emit('startGame', mapUsers);
+
+        return Promise.resolve(room);
+    })
 };
 
 exports.joinRoom = ({name, roomCode}) => {
@@ -180,23 +191,28 @@ exports.joinRoom = ({name, roomCode}) => {
         };
 
         users.push(newUser);
-
         room.users = users;
 
         return room.save();
     }).then(room => {
-        console.log(room);
+        const code = room.get('code');
+        const users = Array.isArray(room.users) ? room.users : [];
 
-        const users = Array.isArray(room.get('users')) ? room.get('users') : [];
+        return _mapCards(users)
+            .then(mapUsers => {
+                console.log(mapUsers);
 
-        let user = {};
+                let user = {};
+                mapUsers.forEach(_user => {
+                    if (_user.name === name) {
+                        user = _user;
+                    }
+                });
 
-        users.forEach(_user => {
-            if (_user.name === name) {
-                user = _user;
-            }
-        });
+                const roomChanel = PushServices.getChanel(`@room/${code}`);
+                roomChanel.emit('newUser', user);
 
-        return Promise.resolve(user);
+                return Promise.resolve(user);
+            });
     });
 };

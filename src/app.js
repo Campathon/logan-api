@@ -18,10 +18,11 @@ const PushServices = require('./services/PushServices');
 const io = PushServices.setup(server);
 
 io.on('connect', (socket) => {
-    console.log('connected!');
+    const {id} = socket;
+    console.log('connected!', id);
 
     socket.on('disconnect', () => {
-        console.log('disconnected!');
+        console.log('disconnected!', id);
     });
 });
 

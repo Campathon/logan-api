@@ -9,3 +9,7 @@ exports.setup = (server) => {
 
     return _store.io;
 };
+
+exports.getChanel = (chanel) => {
+    return _store.io.to(chanel);
+};
