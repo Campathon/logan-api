@@ -21,7 +21,12 @@ io.on('connect', (socket) => {
     const {id} = socket;
     console.log('connected!', id);
 
-    console.log(socket.handshake);
+    const {query} = socket.handshake;
+    const roomCode = query.room || '';
+    if (roomCode) {
+        console.log(`Join room: ${roomCode}`);
+        socket.join(roomCode);
+    }
 
     socket.on('disconnect', () => {
         console.log('disconnected!', id);
