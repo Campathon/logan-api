@@ -25,7 +25,7 @@ io.on('connect', (socket) => {
     const roomCode = query.room || '';
     if (roomCode) {
         console.log(`Join room: ${roomCode}`);
-        socket.join(roomCode);
+        socket.join(`@room/${roomCode}`);
     }
 
     socket.on('disconnect', () => {
