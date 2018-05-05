@@ -17,11 +17,11 @@ const server = require('http').Server(app);
 const PushServices = require('./services/PushServices');
 const io = PushServices.setup(server);
 
-io.on('connect', (socket) => {
+io.on('connect', (socket, args) => {
     const {id} = socket;
     console.log('connected!', id);
 
-    console.log(socket);
+    console.log(args);
 
     socket.on('disconnect', () => {
         console.log('disconnected!', id);
