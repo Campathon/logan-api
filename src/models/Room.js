@@ -15,7 +15,11 @@ const roomSchema = new Schema({
     },
     users: [{
         name: String,
-        card: String
+        card: String,
+        status: {
+            type: String,
+            default: 'active'
+        }
     }],
     updated: {
         type: Date,

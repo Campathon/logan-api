@@ -8,14 +8,27 @@ exports.createRoom = (req, res) => {
 };
 
 exports.joinRoom = (req, res) => {
-    const defaultArags = {
+    const defaultArgs = {
         name: '',
         room: ''
     };
 
-    const {name, room} = Object.assign({}, defaultArags, req.body);
+    const {name, room} = Object.assign({}, defaultArgs, req.body);
 
     RoomActions.joinRoom({name, roomCode: room})
+        .then(sendSuccess(req, res))
+        .catch(sendError(req, res));
+};
+
+exports.playGame = (req, res) => {
+    const defaultArgs = {
+        cards: [],
+        room: ''
+    };
+
+    const {cards, room} = Object.assign({}, defaultArgs, req.body);
+
+    RoomActions.playGame({cards, roomCode: room})
         .then(sendSuccess(req, res))
         .catch(sendError(req, res));
 };
