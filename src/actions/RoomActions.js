@@ -200,13 +200,13 @@ exports.joinRoom = ({name, roomCode}) => {
             throw new Error('Phòng chơi đã kết thúc!');
         }
 
-
-
         if (status === 'ready') {
             throw new Error('Phòng chơi đã đủ người!');
         }
 
         const names = users.map(user => user.name);
+        console.log(names);
+
         if (names.indexOf(name) !== -1) {
             return Promise.resolve(room);
         }
@@ -229,8 +229,6 @@ exports.joinRoom = ({name, roomCode}) => {
 
         return _mapCards(users)
             .then(mapUsers => {
-                console.log(mapUsers);
-
                 let user = {};
                 mapUsers.forEach(_user => {
                     if (_user.name === name) {
