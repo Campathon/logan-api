@@ -80,6 +80,7 @@ exports.playGame = ({cards, roomCode}) => {
         return _asignCards(users, cardIds)
             .then(_users => {
                 room.users = _users;
+                room.status = 'playing';
 
                 return room.save();
             });
@@ -96,7 +97,7 @@ exports.joinRoom = ({name, roomCode}) => {
 
         return Promise.resolve(room);
     }).then(room => {
-        const users = Array.isArray(room.get('rooms')) ? room.get('rooms') : [];
+        const users = Array.isArray(room.get('users')) ? room.get('users') : [];
         const status = room.get('status');
 
         if (status === 'finished') {
