@@ -206,6 +206,7 @@ exports.joinRoom = ({name, roomCode}) => {
 
         const names = users.map(user => user.name);
         console.log(names);
+        console.log(room);
 
         if (names.indexOf(name) !== -1) {
             return Promise.resolve(room);
