@@ -1,5 +1,4 @@
 const express = require('express');
-const app = express();
 const errorHandler = require('errorhandler');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
@@ -7,6 +6,19 @@ const compression = require('compression');
 const cors = require('cors');
 const robots = require('express-robots');
 const getEnv = require('./helpers/getEnv');
+
+const app = express();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
+
+/**
+ * Socket.io
+ */
+app.use((req, res, next) => {
+    res.io = io;
+    next();
+});
+
 
 /**
  * Express configuration.
@@ -33,7 +45,6 @@ app.use(require('./app.routes'));
 /**
  * Start Express server.
  */
-const server = require('http').createServer(app);
 const port = getEnv('/port');
 server.listen(port, () => {
     console.log(`Listening on port ${port}...`);
