@@ -67,9 +67,7 @@ exports.getUsers = (roomCode) => {
         return Promise.resolve(room);
     }).then(room => {
         const users = Array.isArray(room.get('rooms')) ? room.get('rooms') : [];
-        const _users = _mapCards(users);
-
-        return Promise.resolve(_users);
+        return _mapCards(users);
     });
 };
 
