@@ -16,6 +16,7 @@ router.post('/rooms', roomCtrl.createRoom);
 router.post('/rooms/join', roomCtrl.joinRoom);
 router.post('/rooms/ready', roomCtrl.readyRoom);
 router.post('/rooms/play', roomCtrl.playGame);
+router.post('/rooms/close', roomCtrl.closeRoom);
 router.post('/rooms/users', roomCtrl.getUsers);
 
 /**

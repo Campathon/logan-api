@@ -86,6 +86,34 @@ exports.readyRoom = (roomCode) => {
         room.status = 'ready';
 
         return room.save();
+    }).then(room => {
+        const code = room.get('code');
+        const roomChanel = PushServices.getChanel(`@room/${code}`);
+        roomChanel.emit('roomReady', room.toJSON());
+
+        return Promise.resolve(room);
+    });
+};
+
+exports.closeRoom = (roomCode) => {
+    return Room.findOne({
+        code: roomCode
+    }).then(room => {
+        if (!room) {
+            throw new Error("Mã phòng không tồn tại!");
+        }
+
+        return Promise.resolve(room);
+    }).then(room => {
+        room.status = 'finished';
+
+        return room.save();
+    }).then(room => {
+        const code = room.get('code');
+        const roomChanel = PushServices.getChanel(`@room/${code}`);
+        roomChanel.emit('roomClosed', room.toJSON());
+
+        return Promise.resolve(room);
     });
 };
 

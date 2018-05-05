@@ -19,6 +19,18 @@ exports.getUsers = (req, res) => {
         .catch(sendError(req, res));
 };
 
+exports.closeRoom = (req, res) => {
+    const defaultArgs = {
+        room: ''
+    };
+
+    const {room} = Object.assign({}, defaultArgs, req.body);
+
+    RoomActions.closeRoom(room)
+        .then(sendSuccess(req, res))
+        .catch(sendError(req, res));
+};
+
 exports.readyRoom = (req, res) => {
     const defaultArgs = {
         room: ''
