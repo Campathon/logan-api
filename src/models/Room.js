@@ -4,7 +4,7 @@ const connection = require('../app.database');
 
 const roomSchema = new Schema({
     code: {
-        type: Number,
+        type: String,
         index: true,
         unique: true
     },
