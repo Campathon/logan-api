@@ -8,9 +8,14 @@ const roomSchema = new Schema({
         index: true,
         unique: true
     },
-    users: [{
+    status: {
         type: String,
-        trim: true,
+        enum: ['waiting', 'ready', 'playing', 'finished'],
+        default: 'waiting'
+    },
+    users: [{
+        name: String,
+        card: String
     }],
     updated: {
         type: Date,

@@ -6,3 +6,16 @@ exports.createRoom = (req, res) => {
         .then(sendSuccess(req, res))
         .catch(sendError(req, res));
 };
+
+exports.joinRoom = (req, res) => {
+    const defaultArags = {
+        name: '',
+        room: ''
+    };
+
+    const {name, room} = Object.assign({}, defaultArags, req.body);
+
+    RoomActions.joinRoom({name, roomCode: room})
+        .then(sendSuccess(req, res))
+        .catch(sendError(req, res));
+};
