@@ -11,7 +11,7 @@ const _newRoom = (code) => {
     return room.save();
 };
 
-const _asignCards = (users, cardIds) => {
+const _assignCards = (users, cardIds) => {
     let remainCards = cardIds;
 
     for (let i = 0; i < users.length; i++) {
@@ -27,6 +27,22 @@ const _asignCards = (users, cardIds) => {
     }
 
     return Promise.resolve(users);
+};
+
+exports.readyRoom = (roomCode) => {
+    return Room.findOne({
+        code: roomCode
+    }).then(room => {
+        if (!room) {
+            throw new Error("Mã phòng không tồn tại!");
+        }
+
+        return Promise.resolve(room);
+    }).then(room => {
+        room.status = 'ready';
+
+        return room.save();
+    });
 };
 
 exports.createRoom = () => {
@@ -77,7 +93,7 @@ exports.playGame = ({cards, roomCode}) => {
     }).then(room => {
         const users = Array.isArray(room.get('rooms')) ? room.get('rooms') : [];
 
-        return _asignCards(users, cardIds)
+        return _assignCards(users, cardIds)
             .then(_users => {
                 room.users = _users;
                 room.status = 'playing';
