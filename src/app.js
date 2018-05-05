@@ -9,15 +9,18 @@ const getEnv = require('./helpers/getEnv');
 
 const app = express();
 const server = require('http').Server(app);
-const io = require('socket.io')(server);
+
+
+/**
+ * Socket.io
+ */
+const PushServices = require('./services/PushServices');
+const io = PushServices.setup(server);
 
 io.on('connect', () => {
     console.log('connected!');
 });
 
-/**
- * Socket.io
- */
 app.use((req, res, next) => {
     res.io = io;
     next();
