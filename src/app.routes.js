@@ -19,7 +19,7 @@ router.post('/rooms/join', roomCtrl.joinRoom);
  * Cards.
  */
 const cardCtrl = require('./controllers/card');
-router.get('/card', cardCtrl.getListCards);
+router.get('/cards', cardCtrl.getListCards);
 
 /**
  * Exports.

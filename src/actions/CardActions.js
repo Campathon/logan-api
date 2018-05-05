@@ -9,7 +9,7 @@ exports.getListCards = () => {
             const cardsValidated = cards.map(card => {
                 const object = card.toJSON();
 
-                const imageUrl = baseUrl + '/cards/' + object.image;
+                const imageUrl = baseUrl + '/assets/cards/' + object.image;
 
                 return Object.assign({}, object, {
                     image: imageUrl
