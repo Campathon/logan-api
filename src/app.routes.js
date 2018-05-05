@@ -15,6 +15,12 @@ const roomCtrl = require('./controllers/room');
 router.post('/rooms', roomCtrl.createRoom);
 
 /**
+ * Cards.
+ */
+const cardCtrl = require('./controllers/card');
+router.get('/cards', cardCtrl.getListCards);
+
+/**
  * Exports.
  */
 module.exports = router;
