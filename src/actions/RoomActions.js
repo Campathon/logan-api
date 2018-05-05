@@ -237,6 +237,7 @@ exports.joinRoom = ({name, roomCode}) => {
 
                 const roomChanel = PushServices.getChanel(`@room/${code}`);
                 roomChanel.emit('newUser', user);
+                PushServices.emit('newUser', user);
 
                 console.log('newUser', user);
 

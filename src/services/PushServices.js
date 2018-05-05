@@ -13,3 +13,7 @@ exports.setup = (server) => {
 exports.getChanel = (chanel) => {
     return _store.io.to(chanel);
 };
+
+exports.emit = (event, payload) => {
+    return _store.io.emit(event, payload);
+};
