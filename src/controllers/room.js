@@ -64,8 +64,6 @@ exports.playGame = (req, res) => {
 
     const {cards, room} = Object.assign({}, defaultArgs, req.body);
 
-    console.log(req.body);
-
     RoomActions.playGame({cards, roomCode: room})
         .then(sendSuccess(req, res))
         .catch(sendError(req, res));

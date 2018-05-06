@@ -13,6 +13,19 @@ const cardSchema = new Schema({
         trim: true
     },
 
+    popular: {
+        type: Number,
+        index: true
+    },
+
+    description: {
+        type: String,
+    },
+
+    alias: {
+        type: String
+    },
+
     image: {
         type: String,
     },

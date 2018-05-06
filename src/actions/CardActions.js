@@ -5,6 +5,9 @@ const baseUrl = getEnv('/host');
 
 exports.getListCards = () => {
     return Card.find({})
+        .sort({
+            popular: 1
+        })
         .then(cards => {
             const cardsValidated = cards.map(card => {
                 const object = card.toJSON();
