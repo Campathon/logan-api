@@ -156,7 +156,7 @@ exports.playGame = ({cards, roomCode}) => {
         }
     });
 
-    console.log(cardIds);
+    console.log('cardIds', cardIds);
 
     return Room.findOne({
         code: roomCode
@@ -211,10 +211,6 @@ exports.joinRoom = ({name, roomCode}) => {
             throw new Error('Phòng chơi đã kết thúc!');
         }
 
-        if (status === 'ready') {
-            throw new Error('Phòng chơi đã đủ người!');
-        }
-
         const names = users.map(user => user.name);
 
         if (names.indexOf(name) !== -1) {
@@ -223,6 +219,10 @@ exports.joinRoom = ({name, roomCode}) => {
 
         if (status === 'playing') {
             throw new Error('Phòng đang chơi!');
+        }
+
+        if (status === 'ready') {
+            throw new Error('Phòng chơi đã đủ người!');
         }
 
         const newUser = {
@@ -251,7 +251,7 @@ exports.joinRoom = ({name, roomCode}) => {
                 roomChanel.emit('usersChanged', mapUsers);
 
                 console.log('newUser', user);
-                console.log('newUser', mapUsers);
+                console.log('usersChanged', mapUsers);
 
                 return Promise.resolve(user);
             });
