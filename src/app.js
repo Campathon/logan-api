@@ -29,6 +29,8 @@ io.on('connect', (socket) => {
     }
 
     socket.on('joinRoom', (roomCode) => {
+        console.log('Request join room: ', roomCode);
+
         socket.join(`@room/${roomCode}`);
 
         socket.emit('joinRoom', roomCode);
