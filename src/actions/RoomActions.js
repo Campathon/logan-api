@@ -4,6 +4,9 @@ const Card = require('../models/Card');
 const mathHelpers = require('../helpers/math');
 const objectHelpers = require('../helpers/object');
 const PushServices = require('../services/PushServices');
+const getEnv = require('../helpers/getEnv');
+
+const baseUrl = getEnv('/host');
 
 const _newRoom = (code) => {
     const room = new Room({
@@ -18,9 +21,6 @@ const _assignCards = (users, cardIds) => {
     const newUsers = [];
     let remainCards = cardIds;
 
-    console.log('assign', users, cardIds);
-
-
     for (let i = 0; i < users.length; i++) {
         const user = users[i].toJSON ? users[i].toJSON() : users[i];
 
@@ -32,14 +32,10 @@ const _assignCards = (users, cardIds) => {
         const random = mathHelpers.random(0, remainCards.length - 1);
         const card = remainCards[random];
 
-        console.log(random, remainCards);
-
         remainCards = remainCards.filter((id, index) => index !== random);
 
         newUsers.push(Object.assign({}, user, {card}));
     }
-
-    console.log('done', newUsers);
 
     return Promise.resolve(newUsers);
 };
@@ -55,9 +51,17 @@ const _mapCards = (users) => {
             $in: cardIds
         }
     }).then(cards => {
-        const hashCards = objectHelpers.arrayToObject(cards, '_id');
+        const cardsValidated = cards.map(card => {
+            const object = card.toJSON();
 
-        console.log(hashCards);
+            const imageUrl = baseUrl + '/assets/cards/' + object.image;
+
+            return Object.assign({}, object, {
+                image: imageUrl
+            });
+        });
+
+        const hashCards = objectHelpers.arrayToObject(cardsValidated, '_id');
 
         const updatedUsers = users.map(user => {
             const card = user.card || '';
@@ -189,6 +193,7 @@ exports.playGame = ({cards, roomCode}) => {
                 return room.save();
             });
     }).then(room => {
+        const object = room.toJSON();
         const code = room.get('code');
         const users = Array.isArray(room.get('users')) ? room.get('users') : [];
 
@@ -198,9 +203,7 @@ exports.playGame = ({cards, roomCode}) => {
                 roomChanel.emit('startGame', mapUsers);
                 console.log('startGame', mapUsers);
 
-                room.users = mapUsers;
-
-                return Promise.resolve(mapUsers);
+                return Promise.resolve(Object.assign({}, object, {users: mapUsers}));
             });
     });
 };
