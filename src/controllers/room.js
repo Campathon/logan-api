@@ -1,8 +1,16 @@
 const RoomActions = require('../actions/RoomActions');
 const {sendSuccess, sendError} = require('../helpers/response');
 
-exports.createRoom = (req, res) => {
+exports.getRoom = (req, res) => {
     RoomActions.createRoom()
+        .then(sendSuccess(req, res))
+        .catch(sendError(req, res));
+};
+
+exports.createRoom = (req, res) => {
+    const room = req.params['code'] || '';
+
+    RoomActions.getRoom(room)
         .then(sendSuccess(req, res))
         .catch(sendError(req, res));
 };

@@ -75,6 +75,28 @@ const _mapCards = (users) => {
     });
 };
 
+exports.getRoom = (code) => {
+    return Room.findOne({
+        code
+    }).then(room => {
+        if (!room) {
+            throw new Error("Mã phòng không tồn tại!");
+        }
+
+        return Promise.resolve(room);
+    }).then(room => {
+        const users = Array.isArray(room.get('users')) ? room.get('users') : [];
+        const object = room.toJSON();
+
+        return _mapCards(users)
+            .then(mapUsers => {
+                const _room = Object.assign({}, object, {users: mapUsers});
+
+                return Promise.resolve(_room);
+            });
+    });
+};
+
 exports.getUsers = (roomCode) => {
     return Room.findOne({
         code: roomCode
