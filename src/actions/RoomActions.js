@@ -171,6 +171,8 @@ exports.playGame = ({cards, roomCode}) => {
 
         return _assignCards(users, cardIds)
             .then(_users => {
+                console.log('assignCards', _users);
+
                 room.users = _users;
                 room.status = 'playing';
 
