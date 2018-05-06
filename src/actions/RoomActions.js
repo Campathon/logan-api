@@ -27,6 +27,8 @@ const _assignCards = (users, cardIds) => {
         const random = mathHelpers.random(0, remainCards.length - 1);
         const card = remainCards[random];
 
+        console.log(random, remainCards);
+
         remainCards = remainCards.filter((id, index) => index !== random);
         users[i] = Object.assign({}, users[i], {card});
     }
