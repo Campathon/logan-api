@@ -24,7 +24,7 @@ const _assignCards = (users, cardIds) => {
     for (let i = 0; i < users.length; i++) {
         const user = users[i].toJSON ? users[i].toJSON() : users[i];
 
-        if (!remainCards.length) {
+        if (!remainCards.length || user.status !== 'active') {
             newUsers.push(user);
             continue;
         }
