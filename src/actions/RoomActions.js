@@ -290,10 +290,17 @@ exports.joinRoom = ({name, roomCode}) => {
 
         const newUser = {
             name,
+            status: 'active'
         };
 
         users.push(newUser);
-        room.users = users;
+        room.users = users.map(user => {
+            if (user.name === name) {
+                return Object.assign({}, user, {status: 'active'});
+            }
+
+            return user;
+        });
 
         return room.save();
     }).then(room => {
