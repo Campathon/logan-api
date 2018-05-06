@@ -174,15 +174,21 @@ exports.playGame = ({cards, roomCode}) => {
                 return room.save();
             });
     }).then(room => {
-        const users = Array.isArray(room.get('users')) ? room.get('users') : [];
-        const mapUsers = _mapCards(users);
-
         const code = room.get('code');
-        const roomChanel = PushServices.getChanel(`@room/${code}`);
-        roomChanel.emit('startGame', mapUsers);
+        const users = Array.isArray(room.get('users')) ? room.get('users') : [];
 
-        return Promise.resolve(room);
-    })
+        return _mapCards(users)
+            .then(mapUsers => {
+                const roomChanel = PushServices.getChanel(`@room/${code}`);
+                roomChanel.emit('startGame', mapUsers);
+
+                console.log('startGame', mapUsers);
+
+                room.users = mapUsers;
+
+                return room.save();
+            });
+    });
 };
 
 exports.joinRoom = ({name, roomCode}) => {
