@@ -168,8 +168,6 @@ exports.playGame = ({cards, roomCode}) => {
         }
     });
 
-    console.log('cardIds', cardIds);
-
     return Room.findOne({
         code: roomCode
     }).then(room => {
@@ -198,12 +196,11 @@ exports.playGame = ({cards, roomCode}) => {
             .then(mapUsers => {
                 const roomChanel = PushServices.getChanel(`@room/${code}`);
                 roomChanel.emit('startGame', mapUsers);
-
                 console.log('startGame', mapUsers);
 
                 room.users = mapUsers;
 
-                return room.save();
+                return Promise.resolve(mapUsers);
             });
     });
 };
