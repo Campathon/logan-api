@@ -17,6 +17,8 @@ const _newRoom = (code) => {
 const _assignCards = (users, cardIds) => {
     let remainCards = cardIds;
 
+    console.log('assign', users, cardIds);
+
     for (let i = 0; i < users.length; i++) {
         if (!remainCards.length) {
             break;
