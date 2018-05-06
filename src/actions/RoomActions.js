@@ -37,12 +37,15 @@ const _mapCards = (users) => {
         .map(user => user.card)
         .filter(id => !!id);
 
+
     return Card.find({
         _id: {
             $in: cardIds
         }
     }).then(cards => {
         const hashCards = objectHelpers.arrayToObject(cards, '_id');
+
+        console.log(hashCards);
 
         const updatedUsers = users.map(user => {
             const card = user.card || '';
@@ -248,6 +251,7 @@ exports.joinRoom = ({name, roomCode}) => {
                 roomChanel.emit('usersChanged', mapUsers);
 
                 console.log('newUser', user);
+                console.log('newUser', mapUsers);
 
                 return Promise.resolve(user);
             });
