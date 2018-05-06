@@ -31,9 +31,17 @@ io.on('connect', (socket) => {
     socket.on('joinRoom', (roomCode) => {
         console.log('Request join room: ', roomCode);
 
-        socket.join(`@room/${roomCode}`);
+        socket.join(`@room/${roomCode}`, () => {
+            socket.emit('joinRoom', roomCode);
+        });
+    });
 
-        socket.emit('joinRoom', roomCode);
+    socket.on('leaveRoom', (roomCode) => {
+        console.log('Request leave room: ', roomCode);
+
+        socket.leave(`@room/${roomCode}`, () => {
+            socket.emit('leaveRoom', roomCode);
+        });
     });
 
     socket.on('disconnect', () => {
