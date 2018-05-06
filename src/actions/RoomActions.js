@@ -15,13 +15,16 @@ const _newRoom = (code) => {
 };
 
 const _assignCards = (users, cardIds) => {
+    const newUsers = [];
     let remainCards = cardIds;
 
     console.log('assign', users, cardIds);
 
+
     for (let i = 0; i < users.length; i++) {
         if (!remainCards.length) {
-            break;
+            newUsers.push(users[i]);
+            continue;
         }
 
         const random = mathHelpers.random(0, remainCards.length - 1);
@@ -30,10 +33,12 @@ const _assignCards = (users, cardIds) => {
         console.log(random, remainCards);
 
         remainCards = remainCards.filter((id, index) => index !== random);
-        users[i] = Object.assign({}, users[i], {card});
+        newUsers.push(Object.assign({}, users[i], {card}));
     }
 
-    return Promise.resolve(users);
+    console.log('done', newUsers);
+
+    return Promise.resolve(newUsers);
 };
 
 const _mapCards = (users) => {
