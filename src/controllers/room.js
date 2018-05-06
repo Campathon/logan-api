@@ -43,6 +43,19 @@ exports.readyRoom = (req, res) => {
         .catch(sendError(req, res));
 };
 
+exports.leaveRoom = (req, res) => {
+    const defaultArgs = {
+        name: '',
+        room: ''
+    };
+
+    const {name, room} = Object.assign({}, defaultArgs, req.body);
+
+    RoomActions.leaveRoom({name, roomCode: room})
+        .then(sendSuccess(req, res))
+        .catch(sendError(req, res));
+};
+
 exports.joinRoom = (req, res) => {
     const defaultArgs = {
         name: '',

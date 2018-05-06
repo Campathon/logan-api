@@ -208,6 +208,55 @@ exports.playGame = ({cards, roomCode}) => {
     });
 };
 
+exports.leaveRoom = ({name, roomCode}) => {
+    return Room.findOne({
+        code: roomCode
+    }).then(room => {
+        if (!room) {
+            throw new Error("Mã phòng không tồn tại!");
+        }
+
+        return Promise.resolve(room);
+    }).then(room => {
+        const users = Array.isArray(room.get('users')) ? room.get('users') : [];
+        const names = users.map(user => user.name);
+
+        if (names.indexOf(name) === -1) {
+            throw new Error(`Tài khoản ${name} không tồn tại.`);
+        }
+
+        room.users = users.map(user => {
+            const object = user.toJSON();
+
+            if (object.name === name) {
+                return Object.assign({}, object, {status: 'left'});
+            }
+
+            return object;
+        });
+
+        return room.save();
+    }).then(room => {
+        const code = room.get('code');
+        const users = Array.isArray(room.users) ? room.users : [];
+
+        return _mapCards(users)
+            .then(mapUsers => {
+                let user = {};
+                mapUsers.forEach(_user => {
+                    if (_user.name === name) {
+                        user = _user;
+                    }
+                });
+
+                const roomChanel = PushServices.getChanel(`@room/${code}`);
+                roomChanel.emit('usersChanged', mapUsers);
+
+                return Promise.resolve(user);
+            });
+    });
+};
+
 exports.joinRoom = ({name, roomCode}) => {
     return Room.findOne({
         code: roomCode
