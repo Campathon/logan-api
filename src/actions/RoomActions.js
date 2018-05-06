@@ -33,7 +33,9 @@ const _assignCards = (users, cardIds) => {
         console.log(random, remainCards);
 
         remainCards = remainCards.filter((id, index) => index !== random);
-        newUsers.push(Object.assign({}, users[i], {card}));
+        const user = users[i].toJSON ? users[i].toJSON() : users[i];
+
+        newUsers.push(Object.assign({}, user, {card}));
     }
 
     console.log('done', newUsers);
