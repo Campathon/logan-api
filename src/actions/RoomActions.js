@@ -153,7 +153,7 @@ exports.playGame = ({cards, roomCode}) => {
         }
     });
 
-    console.log(cardsValidated);
+    console.log(cardIds);
 
     return Room.findOne({
         code: roomCode
