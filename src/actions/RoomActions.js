@@ -295,11 +295,13 @@ exports.joinRoom = ({name, roomCode}) => {
 
         users.push(newUser);
         room.users = users.map(user => {
+            const object = user.toJSON();
+
             if (user.name === name) {
-                return Object.assign({}, user, {status: 'active'});
+                return Object.assign({}, object, {status: 'active'});
             }
 
-            return user;
+            return object;
         });
 
         return room.save();
