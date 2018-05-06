@@ -28,6 +28,12 @@ io.on('connect', (socket) => {
         socket.join(`@room/${roomCode}`);
     }
 
+    socket.on('joinRoom', (roomCode) => {
+        socket.join(`@room/${roomCode}`);
+
+        socket.emit('joinRoom', roomCode);
+    });
+
     socket.on('disconnect', () => {
         console.log('disconnected!', id);
     });
