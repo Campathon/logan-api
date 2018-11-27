@@ -11,7 +11,7 @@ const data = {
         $filter: "env",
         $default: 'http://localhost:6100',
         staging: 'http://logan.blogk.xyz',
-        production: 'http://logan.blogk.xyz',
+        production: 'https://logan.chatty2.me',
     },
     mongodb: {
         $filter: "env",
